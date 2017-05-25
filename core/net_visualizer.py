@@ -19,6 +19,7 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
     :param title: title of map
     :return: None
     """
+
     m = len(distances[0])
     n = len(distances)
 
@@ -60,10 +61,10 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
 
     cm = plt.get_cmap(color_map)
     colorized_distances = np.array([cm(x) for x in distances.flatten()])
-    patch_list = []
+    hexagon_list = []
 
     for c, xy in zip(colorized_distances, xy_offsets):
-        patch_list.append(
+        hexagon_list.append(
             RegularPolygon(
                 xy=xy,
                 numVertices=6,
@@ -73,14 +74,17 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
             )
         )
 
-    pc = PatchCollection(patch_list, match_original=True)
+    pc = PatchCollection(hexagon_list, match_original=True)
     ax.add_collection(pc)
+
+    # hack
+    sm = plt.cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=1))
+    sm._A = []
+    # end hack
 
     ax.axis([0, m + 1, 0, n + 1])
     ax.set_title(title)
 
-    sm = plt.cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=1))
-    sm._A = []
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = plt.colorbar(sm, cax=cax)
@@ -98,7 +102,8 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
     h = scale * (n / m) if m <= n else scale
 
     fig.set_size_inches(w, h)
-    plt.savefig('/Users/nikon/PycharmProjects/lakohonen/data/map.png', dpi=dpi)
 
     if show:
         plt.show()
+
+    plt.savefig('/Users/nikon/PycharmProjects/lakohonen/data/map.png', dpi=dpi)
