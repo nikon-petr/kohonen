@@ -8,9 +8,10 @@ from matplotlib.patches import RegularPolygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, scale=5.12):
+def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, scale=5.12, show=False):
     """
     Shows and saves Kohonen map for given distances
+    :param show: If it is true shows result map
     :param scale: standard scale of map
     :param dpi: dots per inch
     :param distances: values of distances for Kohonen map
@@ -98,3 +99,6 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
 
     fig.set_size_inches(w, h)
     plt.savefig('/Users/nikon/PycharmProjects/lakohonen/data/map.png', dpi=dpi)
+
+    if show:
+        plt.show()
