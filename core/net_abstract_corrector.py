@@ -10,7 +10,7 @@ class Corrector:
     def __init__(self, nu, tau):
         self._nu = lambda: nu * math.exp(-self._t / tau)
         self._sigma = lambda: nu * math.exp(-self._t / tau)
-        self._t = 1
+        self._t = 0
 
     @abstractmethod
     def initialize(self, net_object):
@@ -24,3 +24,5 @@ class Corrector:
             raise NetIsNotCalculated()
 
         self.initialize(net_object)
+
+        self._t += 1

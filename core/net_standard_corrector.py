@@ -14,6 +14,8 @@ class Standard(Corrector):
             net_object.net[-1]['p'] = np.full((net_object.config[-1]), 1 / net_object.config[-1])
 
     def correct(self, net_object):
+        super(Standard, self).correct(net_object)
+
         net = net_object.net
 
         winner_index = net[-1]['o'].argmin(axis=0)
@@ -29,7 +31,5 @@ class Standard(Corrector):
         g = wh * self._nu()
 
         net[-1]['w'] -= g
-
-        self._t += 1
 
         del net[0]

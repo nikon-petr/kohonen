@@ -41,6 +41,4 @@ class Potential(Corrector):
         net[-1]['p'] += 1 / len(net[-1]['p'])
         net[-1]['p'][winner_index] -= (self.__p_min + 1 / len(net[-1]['p']))
 
-        self._t += 1
-
         del net[0]
