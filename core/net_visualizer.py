@@ -88,7 +88,7 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = plt.colorbar(sm, cax=cax)
-    cb.set_label('Distance')
+    cb.set_label('Average')
 
     ax.tick_params(
         which='both',
