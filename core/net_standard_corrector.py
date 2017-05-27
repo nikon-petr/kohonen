@@ -1,5 +1,4 @@
 import math
-import pprint
 
 import numpy as np
 
@@ -12,10 +11,9 @@ class Standard(Corrector):
 
     def initialize(self, net_object):
         if net_object.net[-1].get('p') is None:
-                net_object.net[-1]['p'] = np.full((net_object.config[-1]), 1 / net_object.config[-1])
+            net_object.net[-1]['p'] = np.full((net_object.config[-1]), 1 / net_object.config[-1])
 
     def correct(self, net_object):
-
         net = net_object.net
 
         winner_index = net[-1]['o'].argmin(axis=0)

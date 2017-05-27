@@ -1,5 +1,6 @@
-import numpy as np
 from math import sqrt
+
+import numpy as np
 
 normalization_functions = {
     'normalization_1': lambda x: x / sqrt(np.sum(x ** 2)),

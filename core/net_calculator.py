@@ -1,5 +1,3 @@
-import pprint
-
 import numpy as np
 
 from core.net_errors import IncorrectInputVectorLength

@@ -1,6 +1,6 @@
 import math
-
 from abc import ABCMeta, abstractmethod
+
 from core.net_errors import NetIsNotInitialized, NetIsNotCalculated
 
 

@@ -67,7 +67,8 @@ class Net:
             em_color = Colors.OKGREEN if em < 0.1 else Colors.FAIL
             d_color = Colors.OKGREEN if delta > 0 else Colors.FAIL
 
-            print('EPOCH:%s %sEm = %.3f%s\t %sD = %.3f%s' % (epoch, em_color, em, Colors.ENDC, d_color, delta, Colors.ENDC))
+            print('EPOCH:%s %sEm = %.3f%s\t %sD = %.3f%s' % (
+            epoch, em_color, em, Colors.ENDC, d_color, delta, Colors.ENDC))
 
             if abs(delta) < stop_delta or em < stop_error:
                 print("TRAINING STOPPED")
