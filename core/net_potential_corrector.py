@@ -6,7 +6,7 @@ from core.net_abstract_corrector import Corrector
 
 
 class Potential(Corrector):
-    def __init__(self, nu=1, tau=1000, p_min=0.75):
+    def __init__(self, nu=0.1, tau=1000, p_min=0.75):
         super(Potential, self).__init__(nu, tau)
         self.__p_min = p_min
 

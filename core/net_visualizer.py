@@ -1,6 +1,7 @@
 import itertools
 import math
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import PatchCollection
@@ -8,9 +9,10 @@ from matplotlib.patches import RegularPolygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, scale=5.12, show=False):
+def save_image(distances, path, color_map='inferno', title='Kohonen Map', dpi=100, scale=5.12, axis_caption='Mean', show=False):
     """
     Shows and saves Kohonen map for given distances
+    :param axis_caption: Axis caption
     :param show: If it is true shows result map
     :param scale: standard scale of map
     :param dpi: dots per inch
@@ -36,7 +38,7 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
     col_start = hexagon_out_r
     col_end = col_start + ((2 * hexagon_in_r + space) * math.sqrt(3) / 2) * (n - 1)
 
-    grid_center = (odd_row_end + hexagon_in_r) / 2, (col_end + hexagon_out_r) / 2
+    grid_center = (even_row_end + hexagon_in_r) / 2, (col_end + hexagon_out_r) / 2
     centring = (m + 1) / 2 - grid_center[0], (n + 1) / 2 - grid_center[1]
 
     odd_row_start += centring[0]
@@ -59,8 +61,8 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
 
     fig, ax = plt.subplots(1)
 
-    cm = plt.get_cmap(color_map)
-    colorized_distances = np.array([cm(x) for x in distances.flatten()])
+    cm = plt.cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=1))
+    colorized_distances = cm.to_rgba(distances.flatten())
     hexagon_list = []
 
     for c, xy in zip(colorized_distances, xy_offsets):
@@ -88,7 +90,7 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = plt.colorbar(sm, cax=cax)
-    cb.set_label('Average')
+    cb.set_label(axis_caption)
 
     ax.tick_params(
         which='both',
@@ -103,7 +105,9 @@ def save_image(distances, color_map='inferno', title='Kohonen Map', dpi=100, sca
 
     fig.set_size_inches(w, h)
 
+    ax.invert_yaxis()
+
     if show:
         plt.show()
 
-    plt.savefig('/Users/nikon/PycharmProjects/lakohonen/data/map.png', dpi=dpi)
+    plt.savefig(path, dpi=dpi)

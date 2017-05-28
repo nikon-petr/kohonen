@@ -24,3 +24,7 @@ class NetIsNotInitialized(Exception):
 
 class NetIsNotCalculated(Exception):
     pass
+
+
+class UnknownAggregationFunction(Exception):
+    pass

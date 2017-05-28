@@ -1,8 +1,13 @@
 import random
+import os
+import numpy as np
 
 from core.net_calculator import calculate
 from core.net_error_evaluator import evaluate
 from core.net_initializer import initialize
+from core.net_mapping import calculate_map
+from core.net_visualizer import save_image
+from core.net_neighboring import calculate_average_neighboring
 from core.net_loader import upload, unload
 from core.net_state import NetState
 from lib.colors import Colors
@@ -22,6 +27,8 @@ class Net:
     def __init__(self, f, corrector, corrector_param=None):
         self.__state = NetState(f)
         self.__corrector = corrector(**corrector_param) if corrector_param else corrector()
+        self.__m = None
+        self.__n = None
 
     @property
     def corrector(self):
@@ -40,11 +47,13 @@ class Net:
         unload(self.__state, path)
 
     @raise_exceptions
-    def initialize(self, input, m, n, factor):
+    def initialize(self, input, m, n, factor, negative):
+        self.__m = m
+        self.__n = n
         self.__state.config = []
         self.__state.config.append(input)
         self.__state.config.append(m * n)
-        initialize(self.__state, factor)
+        initialize(self.__state, factor, negative)
 
     @raise_exceptions
     def calculate(self, vector):
@@ -53,6 +62,7 @@ class Net:
 
     @raise_exceptions
     def train(self, epoch, train_data, stop_error=0.1, stop_delta=0.0001):
+        print("TRAINING STARTED")
         em = 0
         for epoch in range(epoch):
             e_sum = 0
@@ -73,3 +83,15 @@ class Net:
             if abs(delta) < stop_delta or em < stop_error:
                 print("TRAINING STOPPED")
                 break
+
+    def visualize_u_matrix(self, path):
+        distances = calculate_average_neighboring(self.__state, self.__m, self.__n)
+        title = 'U-matrix %sx%s' % (self.__m, self.__n)
+        save_image(distances, path, title=title, color_map='binary', axis_caption='Mean distance')
+
+    def visualize_maps(self, dataset, mode, path):
+        mean = calculate_map(self.__state, self.__m, self.__n, dataset, mode)
+        for n, r in enumerate(mean):
+            title = 'Feature %s %sx%s' % (n + 1, self.__m, self.__n)
+            file = os.path.join(path, 'feature_%s.png' % (n + 1))
+            save_image(r, file, title=title, color_map='inferno', axis_caption='Mean value')
