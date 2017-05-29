@@ -27,8 +27,6 @@ class Net:
     def __init__(self, f, corrector, corrector_param=None):
         self.__state = NetState(f)
         self.__corrector = corrector(**corrector_param) if corrector_param else corrector()
-        self.__m = None
-        self.__n = None
 
     @property
     def corrector(self):
@@ -48,11 +46,9 @@ class Net:
 
     @raise_exceptions
     def initialize(self, input, m, n, factor, negative):
-        self.__m = m
-        self.__n = n
-        self.__state.config = []
-        self.__state.config.append(input)
-        self.__state.config.append(m * n)
+        self.__state.m = m
+        self.__state.n = n
+        self.__state.config = [input, m * n]
         initialize(self.__state, factor, negative)
 
     @raise_exceptions
@@ -85,13 +81,13 @@ class Net:
                 break
 
     def visualize_u_matrix(self, path):
-        distances = calculate_average_neighboring(self.__state, self.__m, self.__n)
-        title = 'U-matrix %sx%s' % (self.__m, self.__n)
+        distances = calculate_average_neighboring(self.__state)
+        title = 'U-matrix %sx%s' % (self.__state.m, self.__state.n)
         save_image(distances, path, title=title, color_map='binary', axis_caption='Mean distance')
 
     def visualize_maps(self, dataset, mode, path):
-        mean = calculate_map(self.__state, self.__m, self.__n, dataset, mode)
+        mean = calculate_map(self.__state, dataset, mode)
         for n, r in enumerate(mean):
-            title = 'Feature %s %sx%s' % (n + 1, self.__m, self.__n)
+            title = 'Feature %s %sx%s' % (n + 1, self.__state.m, self.__state.n)
             file = os.path.join(path, 'feature_%s.png' % (n + 1))
             save_image(r, file, title=title, color_map='inferno', axis_caption='Mean value')

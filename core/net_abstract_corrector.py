@@ -24,5 +24,3 @@ class Corrector:
             raise NetIsNotCalculated()
 
         self.initialize(net_object)
-
-        self._t += 1

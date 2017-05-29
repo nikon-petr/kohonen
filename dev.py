@@ -18,7 +18,7 @@ if __name__ == '__main__':
     net.initialize(input=4, m=4, n=4, factor=1, negative=False)
     # net.load_from('/Users/nikon/PycharmProjects/lakohonen/data/iris.net.json')
 
-    net.train(100, dataset, stop_error=10 ** -20, stop_delta=10 ** -30)
+    net.train(100, dataset, stop_error=0.001, stop_delta=0.001)
 
     net.visualize_maps(dataset, 'max', '/Users/nikon/PycharmProjects/lakohonen/data')
     net.visualize_u_matrix('/Users/nikon/PycharmProjects/lakohonen/data/u-matrix.png')

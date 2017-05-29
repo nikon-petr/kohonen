@@ -4,3 +4,5 @@ class NetState:
         self.config = None
         self.net = None
         self.calculated = None
+        self.m = None
+        self.n = None

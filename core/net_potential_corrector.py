@@ -6,7 +6,7 @@ from core.net_abstract_corrector import Corrector
 
 
 class Potential(Corrector):
-    def __init__(self, nu=0.1, tau=1000, p_min=0.75):
+    def __init__(self, nu=0.1, tau=1000, p_min=0.9):
         super(Potential, self).__init__(nu, tau)
         self.__p_min = p_min
 
@@ -25,6 +25,8 @@ class Potential(Corrector):
         net_output.mask[inactive] = True
 
         winner_index = net_output.argmin(axis=0)
+
+        # print(winner_index)
 
         d = np.apply_along_axis(lambda x: net_object.d(net[-1]['w'][winner_index], x), 1, net[-1]['w'])
 

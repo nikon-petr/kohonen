@@ -5,7 +5,7 @@ import numpy as np
 from core.net_errors import NetIsNotInitialized, UnknownAggregationFunction
 
 
-def calculate_map(net_object, m, n, dataset, mode='avg'):
+def calculate_map(net_object, dataset, mode='avg'):
     f = {
         'avg': np.average,
         'max': np.max,
@@ -37,5 +37,5 @@ def calculate_map(net_object, m, n, dataset, mode='avg'):
             mean.append(f[mode](dataset[i], axis=0))
 
     m_mean = np.array(mean).T
-    m_mean = m_mean.reshape((m_mean.shape[0], m, n))
+    m_mean = m_mean.reshape((m_mean.shape[0], net_object.m, net_object.n))
     return m_mean
