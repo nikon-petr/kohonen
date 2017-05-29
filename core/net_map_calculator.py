@@ -19,7 +19,7 @@ def calculate_map(net_object, dataset, mode='avg'):
 
     net = net_object.net
 
-    v = [[] for i in range(net_object.config[-1])]
+    dataset_indexes = [[] for i in range(net_object.config[-1])]
 
     for count, vector in enumerate(dataset):
         net.insert(0, {'o': vector})
@@ -27,15 +27,15 @@ def calculate_map(net_object, dataset, mode='avg'):
 
         j = net[-1]['o'].argmin(axis=0)
 
-        v[j].append(count)
+        dataset_indexes[j].append(count)
 
-    mean = []
-    for count, i in enumerate(v):
-        if len(i) == 0:
-            mean.append(net[-1]['w'][count])
+    mean_parameter = []
+    for count, indexes in enumerate(dataset_indexes):
+        if not indexes:
+            mean_parameter.append(net[-1]['w'][count])
         else:
-            mean.append(f[mode](dataset[i], axis=0))
+            mean_parameter.append(f[mode](dataset[indexes], axis=0))
 
-    m_mean = np.array(mean).T
-    m_mean = m_mean.reshape((m_mean.shape[0], net_object.m, net_object.n))
-    return m_mean
+    mean_parameter = np.array(mean_parameter).T
+    mean_parameter = mean_parameter.reshape((mean_parameter.shape[0], net_object.m, net_object.n))
+    return mean_parameter

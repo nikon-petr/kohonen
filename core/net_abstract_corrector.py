@@ -8,9 +8,15 @@ class Corrector:
     __metaclass__ = ABCMeta
 
     def __init__(self, nu, tau):
-        self._nu = lambda: nu * math.exp(-self._t / tau)
-        self._sigma = lambda: nu * math.exp(-self._t / tau)
+        self.__nu = nu
+        self.__tau = tau
         self._t = 0
+
+    def nu(self):
+        return self.__nu * math.exp(-self._t / self.__tau)
+
+    def sigma(self):
+        return self.__nu * math.exp(-self._t / self.__tau)
 
     @abstractmethod
     def initialize(self, net_object):
@@ -24,3 +30,5 @@ class Corrector:
             raise NetIsNotCalculated()
 
         self.initialize(net_object)
+
+        self._t += 1

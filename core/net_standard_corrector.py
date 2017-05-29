@@ -18,17 +18,17 @@ class Standard(Corrector):
 
         net = net_object.net
 
-        winner_index = net[-1]['o'].argmin(axis=0)
+        bmu_index = net[-1]['o'].argmin(axis=0)
 
-        d = np.apply_along_axis(lambda x: net_object.d(net[-1]['w'][winner_index], x), 1, net[-1]['w'])
+        d = np.apply_along_axis(lambda ij: math.sqrt(np.sum((net[-1]['i'][bmu_index] - ij) ** 2)), 1, net[-1]['i'])
 
-        h = np.vectorize(math.exp)(-d / self._sigma())
+        h = np.vectorize(math.exp)(-d / self.sigma())
 
         w = np.apply_along_axis(lambda x: x - net[0]['o'], 1, net[-1]['w'])
 
         wh = np.apply_along_axis(lambda x: x * h, 0, w)
 
-        g = wh * self._nu()
+        g = wh * self.nu()
 
         net[-1]['w'] -= g
 

@@ -14,4 +14,5 @@ def initialize(net_object, factor=0.01, negative=True):
     net_object.net.append({
         'w': np.random.uniform(-factor if negative else 0, factor, (net_object.config[-1], net_object.config[0])),
         'o': np.zeros((net_object.config[-1])),
+        'i': np.array([ij for ij in np.ndindex((net_object.m, net_object.n))]),
     })

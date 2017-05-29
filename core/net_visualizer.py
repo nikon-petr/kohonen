@@ -4,26 +4,27 @@ import math
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import cm
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import RegularPolygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-def save_image(distances, path, color_map='inferno', title='Kohonen Map', dpi=100, scale=5.12, axis_caption='Mean', show=False):
+def make_image(values, path, clusters=None, cluster_number=None, color_map='inferno', title='Kohonen Map', dpi=100, scale=5.12, axis_caption='Mean', show=False):
     """
     Shows and saves Kohonen map for given distances
     :param axis_caption: Axis caption
     :param show: If it is true shows result map
     :param scale: standard scale of map
     :param dpi: dots per inch
-    :param distances: values of distances for Kohonen map
+    :param values: values of distances for Kohonen map
     :param color_map: color map e.g. "binary", "Inferno", "Purples", "Magma", "Plasma", "Viridis"
     :param title: title of map
     :return: None
     """
 
-    m = len(distances[0])
-    n = len(distances)
+    m = len(values[0])
+    n = len(values)
 
     hexagon_out_r = 0.5
     hexagon_in_r = hexagon_out_r * math.sqrt(3) / 2
@@ -61,9 +62,17 @@ def save_image(distances, path, color_map='inferno', title='Kohonen Map', dpi=10
 
     fig, ax = plt.subplots(1)
 
-    cm = plt.cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=1))
-    colorized_distances = cm.to_rgba(distances.flatten())
+    d = values.flatten()
+
+    cm_object = plt.cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=1))
+    colorized_distances = cm_object.to_rgba(d)
     hexagon_list = []
+
+    if clusters:
+        colors = plt.cm.rainbow(np.linspace(0, 1, 3))
+        for i in range(colorized_distances.shape[0]):
+            if clusters[i] >= 0:
+                colorized_distances[i] = colors[clusters[i]]
 
     for c, xy in zip(colorized_distances, xy_offsets):
         hexagon_list.append(
