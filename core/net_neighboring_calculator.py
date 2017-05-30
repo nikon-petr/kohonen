@@ -1,3 +1,5 @@
+import pprint
+
 import numpy as np
 
 from core.net_errors import NetIsNotInitialized
@@ -21,7 +23,12 @@ def calculate_average_neighboring(net_object):
     for i, j in np.ndindex(weights.shape[:2]):
         if not weights.mask[i, j].all():
             a = [[i - 1, i - 1, i, i, i + 1, i + 1], [j - 1, j, j - 1, j + 1, j - 1, j]]
-            d = np.apply_along_axis(lambda v: net_object.d(weights[i, j], v), 1, weights[a])
+            w = weights[a]
+            d = []
+            for weight in w:
+                if not np.all(weight.mask):
+                    d.append(net_object.d(weights[i, j], weight))
+
             result[i - 1, j - 1] = np.nanmean(d)
 
     return result
