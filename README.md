@@ -1,7 +1,7 @@
-# Kohonen network
+# Kohonen Neural Network
 Kohonen neural network emulator python app 
 
-## Build with
+## Built with
 
 * python
 * numpy
