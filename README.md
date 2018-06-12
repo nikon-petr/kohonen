@@ -1,5 +1,5 @@
 # Kohonen Neural Network
-Kohonen neural network emulator python app 
+Kohonen neural network emulator educational project
 
 ## Built with
 
